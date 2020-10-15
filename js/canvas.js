@@ -1,11 +1,11 @@
-const GREY = 'grey';
-const ORANGE = 'orange';
-const RED = 'red';
+const GREY = "grey";
+const ORANGE = "orange";
+const RED = "red";
 const INDENT = 10;
 const SNAPPING_AREA = 10;
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
 const rectangles=[
   {
@@ -41,7 +41,7 @@ let dragItemDefault = null;
 let dragItem = null;
 
 function setCanvasDimensions(){
-  const canvasWrapper = document.querySelector('.canvas-wrap');
+  const canvasWrapper = document.querySelector(".canvas-wrap");
   const canvasWrapperRect = canvasWrapper.getBoundingClientRect();  
   canvas.setAttribute("width", Math.round(canvasWrapperRect.width - INDENT));
   canvas.setAttribute("height", Math.round(canvasWrapperRect.height - INDENT));
@@ -66,7 +66,7 @@ function markDraggableRectangle(event){
       rectangles[item.idx].isDraggable = true;
       rectangles[item.idx].color = ORANGE;
       dragItemDefault = rectangles[item.idx]
-      drawRectangle(ctx,  dragItemDefault);     
+      drawRectangle(ctx, dragItemDefault);     
     }     
   })
 }
@@ -77,7 +77,7 @@ function hasMouseInsideRectangle(event, item){
   const mouseY = Math.round(event.clientY - canvasRect.top);
   const xItemMaxPos = item.x + item.width;
   const yItemMaxPos = item.y + item.height;
-  
+
   return mouseX > item.x && mouseX < xItemMaxPos && mouseY > item.y && mouseY < yItemMaxPos;  
 }
 
@@ -136,6 +136,11 @@ function snapRectangles(noDragItem, dragItem, noDraggableItems){
       rectangles[dragItem.idx].y = noDragItem.y;
     }
   }
+
+  if(dragItem.x < noDragItem.x - SNAPPING_AREA){
+    rectangles[dragItem.idx].x = noDragItem.x - dragItem.width + ctx.lineWidth;
+    rectangles[dragItem.idx].y = noDragItem.y;
+  }
   markOverlappingRectangles(noDraggableItems,dragItem );
 }
 
@@ -156,8 +161,8 @@ function moveRectangle(event){
   dragItem = rectangles.find(item => item.isDraggable);
   if(dragItem){       
     const canvasRect = canvas.getBoundingClientRect(); 
-    const xPos = Math.round(event.clientX - canvasRect.left) - dragItem.width/2;
-    const yPos = Math.round(event.clientY - canvasRect.top) - dragItem.height/2;
+    const xPos = Math.round(event.clientX - canvasRect.left) - dragItem.width / 2;
+    const yPos = Math.round(event.clientY - canvasRect.top) - dragItem.height / 2;
     const newRectangle = {
         x: xPos,
         y: yPos,
